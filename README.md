@@ -1,70 +1,183 @@
-# Getting Started with Create React App
+# Визуальная часть Todo App:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+/_ eslint-disable _/
 
-## Available Scripts
+https://sensational-halva-df70ca.netlify.app/
 
-In the project directory, you can run:
+1. npm run start
+2. npm run format
+3. npx lint-staged
 
-### `npm start`
+App /////
+/_ eslint-disable _/
+import React, { Component } from 'react';
+import Header from '../header';
+import ErrorBoundry from '../error-boundry';
+import RandomPlanet from '../random-planet';
+import { PeoplePage } from '../pages';
+import { PlanetPage } from '../pages';
+import { StarshipPage } from '../pages';
+import { SwapiServiceProvider } from '../swapi-service-context/swapi-service-context';
+import SwapiService from '../../services/swapi-service';
+import DummySwapiService from '../../services/dummy-swapi-service';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Layout } from '../hoc-helper';
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+import './app.css';
+import StarshipDetails from '../sw-components/starship-details';
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+export default class App extends Component {
+state = {
+swapiService: new SwapiService(),
+};
 
-### `npm test`
+onServiceChange = () => {
+this.setState(({ swapiService }) => {
+const Service = swapiService instanceof SwapiService ? DummySwapiService : SwapiService;
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+      return {
+        swapiService: new Service(),
+      };
+    });
 
-### `npm run build`
+};
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+render() {
+return (
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<div className="stardb-app">
+<ErrorBoundry>
+<SwapiServiceProvider value={this.state.swapiService}>
+<Router>
+<Header onServiceChange={this.onServiceChange} />
+<RandomPlanet />
+<Routes>
+<Route path="/" element={<Layout />}>
+<Route index element={<h2>Welcome to StarDB</h2>} />
+<Route path="people/:id?" element={<PeoplePage />} />
+<Route path="planets" element={<PlanetPage />} />
+<Route path="starships/" element={<StarshipPage />} />
+<Route path="starships/:id" element={<StarshipDetails />} />
+</Route>
+</Routes>
+</Router>
+</SwapiServiceProvider>
+</ErrorBoundry>
+</div>
+);
+}
+}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+/_ eslint-disable _/
+import React, { useState } from 'react';
+import ErrorBoundry from '../error-boundry';
+import Header from '../header';
+import RandomPlanet from '../random-planet';
+import { PeoplePage } from '../pages';
+import { PlanetPage } from '../pages';
+import { StarshipPage } from '../pages';
+import StarshipDetails from '../sw-components/starship-details';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Layout } from '../hoc-helper';
+import SwapiService from '../../services/swapi-service';
+import DummySwapiService from '../../services/dummy-swapi-service';
+import { SwapiServiceProvider } from '../swapi-service-context/swapi-service-context';
+import './app.css';
 
-### `npm run eject`
+const App = () => {
+const [swapiService, setSwapiService] = useState(new SwapiService());
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+const onServiceChange = () => {
+setSwapiService(({ swapiService }) => {
+const Service = swapiService instanceof SwapiService ? DummySwapiService : SwapiService;
+console.log(Service);
+return {
+swapiService: new Service(),
+};
+});
+};
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+return (
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<div className="stardb-app">
+<ErrorBoundry>
+<SwapiServiceProvider value={swapiService}>
+<Router>
+<Header onServiceChange={onServiceChange} />
+<RandomPlanet />
+<Routes>
+<Route path="/" element={<Layout />}>
+<Route index element={<h2>Welcome to StarDB</h2>} />
+<Route path="people/:id?" element={<PeoplePage />} />
+<Route path="planets" element={<PlanetPage />} />
+<Route path="starships/" element={<StarshipPage />} />
+<Route path="starships/:id" element={<StarshipDetails />} />
+</Route>
+</Routes>
+</Router>
+</SwapiServiceProvider>
+</ErrorBoundry>
+</div>
+);
+};
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+export default App;
 
-## Learn More
+//! Enhaser for Redux
+/_ eslint-disable _/
+import { createStore, compose } from 'redux';
+import reducer from './reducer';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const logMiddleware = (store, dispatch) => (action) => {
+console.log(action.type, store.getState());
+return dispatch(action);
+};
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const stringMiddleware = (dispatch) => (action) => {
+if (typeof action === 'string') {
+return dispatch({
+type: action,
+});
+}
+return dispatch(action);
+};
 
-### Code Splitting
+const logEnhancer =
+(createStore) =>
+(...args) => {
+const store = createStore(...args);
+const originalDispatch = store.dispatch;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    store.dispatch = (action) => {
+      console.log(action.type);
+      return originalDispatch(action);
+    };
 
-### Analyzing the Bundle Size
+    return store;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+};
 
-### Making a Progressive Web App
+const stringEhancer =
+(createStore) =>
+(...args) => {
+const store = createStore(...args);
+const originalDispatch = store.dispatch;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    store.dispatch = (action) => {
+      if (typeof action === 'string') {
+        return originalDispatch({
+          type: action,
+        });
+      }
+      originalDispatch(action);
+    };
 
-### Advanced Configuration
+    return store;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+};
 
-### Deployment
+const store = createStore(reducer, compose(stringEhancer, logEnhancer));
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+store.dispatch('HELLO_WORLD');
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default store;

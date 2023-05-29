@@ -1,0 +1,147 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+:focus,
+:active {
+  outline: none;
+}
+a:focus,
+a:active {
+  outline: none;
+}
+
+nav,
+footer,
+header,
+aside {
+  display: block;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  background-color: #e5e5e5;
+}
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+[hidden] {
+  display: none;
+}
+
+input::-ms-clear {
+  display: none;
+}
+button {
+  cursor: pointer;
+}
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+a,
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+ul li {
+  list-style: none;
+}
+img {
+  vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: 400;
+}
+/*--------------------*/
+
+.Pseudo-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: polygon(0px 0px, 0px 0px, 0px 0px);
+  clip-path: polygon(0px 0px, 0px 0px, 0px 0px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.Page-wrapper {
+  background-color: #f3f7fa;
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 774px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: 570px) {
+    padding: 0 10px 20px;
+  }
+}
+
+.Logo-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.Logo {
+  margin: 30px 0;
+}
+
+.Tickets {
+  margin-left: 20px;
+  width: 502px;
+  flex-shrink: 1 1;
+
+  @media (max-width: 800px) {
+    margin-left: 0;
+  }
+
+  @media (max-width: 570px) {
+    width: 100%;
+  }
+}

@@ -1,0 +1,59 @@
+.Wrapper {
+  display: flex;
+  margin-bottom: 20px;
+
+  @media (max-width: 570px) {
+    flex-direction: column;
+  }
+}
+
+.Button {
+  max-width: 100%;
+  text-transform: uppercase;
+  padding: 15px;
+  background-color: #fff;
+  flex: 1 1 0;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 0;
+  border: 1px solid #dfe5ec;
+}
+
+.Button:focus {
+  outline: 1px solid #2196f3;
+  z-index: 1;
+}
+
+.Button:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.Button:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.ButtonActive {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.Show-more-button {
+  background: #2196f3;
+  display: flex;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  justify-content: center;
+  padding: 15px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.Show-more-button:focus {
+  outline: 1px solid #2196f3;
+}

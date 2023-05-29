@@ -1,0 +1,36 @@
+.Tickets {
+  margin-left: 20px;
+  width: 502px;
+  flex-shrink: 1 1;
+
+  @media (max-width: 800px) {
+    margin-left: 0;
+  }
+
+  @media (max-width: 570px) {
+    width: 100%;
+  }
+}
+
+.Spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.Show-more-button {
+  background: #2196f3;
+  display: flex;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  justify-content: center;
+  padding: 15px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.Show-more-button:focus {
+  outline: 1px solid #2196f3;
+}

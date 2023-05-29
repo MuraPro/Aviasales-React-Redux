@@ -1,0 +1,72 @@
+.Filter {
+  width: 232px;
+  padding: 20px 0 7px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 800px) {
+    margin-bottom: 20px;
+  }
+}
+
+.Title {
+  padding: 0 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.List {
+  list-style: none;
+}
+
+.Item {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.Item:hover {
+  cursor: pointer;
+  background-color: #f1fcff;
+}
+
+.CustomCheckbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #9abbce;
+  border-radius: 2px;
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-right: 10px;
+}
+
+.RealCheckbox:checked ~ .CustomCheckbox::before {
+  content: url('../../images/check-mark.svg');
+  justify-content: center;
+  align-items: center;
+  display: inline-block;
+  width: 12px;
+  height: 8px;
+  background-size: contain;
+  background: no-repeat;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -130%);
+}
+
+.RealCheckbox:checked ~ .CustomCheckbox {
+  border: 1px solid #2196f3;
+}
+
+.RealCheckbox:focus ~ .CustomCheckbox {
+  outline: 1px solid #2196f3;
+}
