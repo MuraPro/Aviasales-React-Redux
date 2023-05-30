@@ -4,7 +4,7 @@ import ErrorIndicator from '../Error-indicator/error-indicator';
 import { Spin } from 'antd';
 import classes from '../Item-list/Item-list.module.scss';
 
-const withData = (View) => {
+const withValidation = (View) => {
   return class extends Component {
     render() {
       const { items, loading, hasError } = this.props;
@@ -30,4 +30,4 @@ const withData = (View) => {
   };
 };
 
-export default withData;
+export default withValidation;

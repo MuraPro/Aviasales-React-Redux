@@ -1,4 +1,5 @@
-import withAviasalesService from './with-bookstore-service';
-import withData from './witth-data';
+import withAviasalesService from './with-aviasales-service';
+import withValidation from './with-validation';
+import withData from './with-data';
 
-export { withAviasalesService, withData };
+export { withAviasalesService, withValidation, withData };
