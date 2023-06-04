@@ -11,12 +11,18 @@ const withData = (View) => {
     constructor() {
       super();
       this.state = {
-        tickets: [{}],
+        tickets: [],
         loading: true,
         hasError: false,
         limit: 5,
         offset: 0,
         filters: 'cheap',
+        usedCheckbox: 'all',
+        flagAll: true,
+        flagWithoutStops: true,
+        flagOneStop: true,
+        flagTwoStops: true,
+        flagThreeStops: true,
       };
     }
 
@@ -75,13 +81,111 @@ const withData = (View) => {
       });
     };
 
+    onUsedCheckboxNameChange = (value) => {
+      this.setState({ usedCheckbox: value });
+    };
+
+    filerChange = (items, checkboxName) => {
+      switch (checkboxName) {
+        case 'flagWithoutStops':
+          return items;
+        case 'flagOneStop':
+          return items;
+
+        case 'flagTwoStops':
+          return items;
+
+        case 'flagThreeStops':
+          return items;
+        default:
+          return items;
+      }
+    };
+
+    allTicketsCheckbox = () => {
+      this.setState((state) => {
+        return {
+          flagAll: !state.flagAll,
+        };
+      });
+    };
+
+    withoutStopsCheckbox = (name) => {
+      this.onUsedCheckboxNameChange(name);
+
+      this.setState((state) => {
+        return {
+          flagWithoutStops: !state.flagWithoutStops,
+        };
+      });
+    };
+
+    oneStopsCheckbox = (name) => {
+      this.onUsedCheckboxNameChange(name);
+
+      this.setState((state) => {
+        return {
+          flagOneStop: !state.flagOneStop,
+        };
+      });
+    };
+
+    twoStopsCheckbox = (name) => {
+      this.onUsedCheckboxNameChange(name);
+
+      this.setState((state) => {
+        return {
+          flagTwoStops: !state.flagTwoStops,
+        };
+      });
+    };
+
+    threeStopsCheckbox = (name) => {
+      this.onUsedCheckboxNameChange(name);
+
+      this.setState((state) => {
+        return {
+          flagThreeStops: !state.flagThreeStops,
+        };
+      });
+    };
+
     componentDidMount() {
       this.onItemLoaded();
     }
 
     render() {
-      const { tickets, filters, loading, hasError, limit, offset } = this.state;
+      const {
+        usedCheckbox,
+        tickets,
+        filters,
+        loading,
+        hasError,
+        limit,
+        offset,
+        flagAll,
+        flagWithoutStops,
+        flagOneStop,
+        flagTwoStops,
+        flagThreeStops,
+      } = this.state;
+
+      const visibalItems = this.filerChange(tickets, usedCheckbox);
+      console.log(
+        'flagAll',
+        flagAll,
+        'flagWithoutStops',
+        flagWithoutStops,
+        'flagOneStop',
+        flagOneStop,
+        'flagTwoStops',
+        flagTwoStops,
+        'flagThreeStops',
+        flagThreeStops,
+      );
+
       const filterItems = this.sortTickets(tickets, filters);
+
       const items = filterItems.slice(offset, limit);
 
       const data = {
@@ -89,8 +193,18 @@ const withData = (View) => {
         filters: filters,
         loading: loading,
         hasError: hasError,
+        flagAll: flagAll,
+        flagWithoutStops: flagWithoutStops,
+        flagOneStop: flagOneStop,
+        flagTwoStops: flagTwoStops,
+        flagThreeStops: flagThreeStops,
         showNextTicket: this.showNextTicket,
         onFilterChange: this.onFilterChange,
+        allTicketsCheckbox: this.allTicketsCheckbox,
+        withoutStopsCheckbox: this.withoutStopsCheckbox,
+        oneStopsCheckbox: this.oneStopsCheckbox,
+        twoStopsCheckbox: this.twoStopsCheckbox,
+        threeStopsCheckbox: this.threeStopsCheckbox,
       };
 
       return (

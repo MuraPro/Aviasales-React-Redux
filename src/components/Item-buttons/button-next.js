@@ -10,6 +10,10 @@ export default function AddTicketsButton({ showNextTicket }) {
   );
 }
 
+AddTicketsButton.defaultProps = {
+  showNextTicket: () => {},
+};
+
 AddTicketsButton.propTypes = {
   showNextTicket: PropTypes.func,
 };

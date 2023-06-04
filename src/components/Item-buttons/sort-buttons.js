@@ -6,7 +6,7 @@ import classes from './Item-buttons.module.scss';
 
 export default function SortButtons({ filters, onFilterChange }) {
   const buttons = [
-    { name: 'cheap', label: 'Самые дешевые' },
+    { name: 'cheap', label: 'Для Комилюши :)' },
     { name: 'speed', label: 'Самые быстрые' },
     { name: 'optimal', label: 'Оптимальные' },
   ];
@@ -25,6 +25,11 @@ export default function SortButtons({ filters, onFilterChange }) {
 
   return <div className={classes.Wrapper}>{tabs}</div>;
 }
+
+SortButtons.defaultprops = {
+  filters: '',
+  onFilterChange: () => {},
+};
 
 SortButtons.propTypes = {
   filters: PropTypes.string,

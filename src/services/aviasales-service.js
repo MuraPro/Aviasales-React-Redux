@@ -26,7 +26,7 @@ export default class AviasalesService {
 
       const { tickets, stop } = await data;
       if (stop) isNotLastTicketsPack = false;
-
+      //   console.log(tickets);
       return tickets.map((ticket) => this.transformTickets(ticket));
     }
   };
