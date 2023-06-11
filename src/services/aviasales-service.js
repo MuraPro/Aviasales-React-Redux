@@ -19,19 +19,16 @@ export default class AviasalesService {
 
   getTickets = async () => {
     let isNotLastTicketsPack = true;
-
     while (isNotLastTicketsPack) {
       const { searchId } = await this.getResource(`/search`);
       const data = await this.getResource(`/tickets?searchId=${searchId}`);
-
       const { tickets, stop } = await data;
       if (stop) isNotLastTicketsPack = false;
-      //   console.log(tickets);
-      return tickets.map((ticket) => this.transformTickets(ticket));
+      return tickets.map((ticket, stop) => this.transformTickets(ticket, stop));
     }
   };
 
-  transformTickets = (ticket) => {
+  transformTickets = (ticket, stop) => {
     return {
       carrier: ticket.carrier,
       price: ticket.price,
@@ -41,9 +38,10 @@ export default class AviasalesService {
       backwardDuration: ticket.segments[1].duration,
       forwardStops: ticket.segments[0].stops,
       backwardStops: ticket.segments[1].stops,
-      forwardStopsLength: ticket.segments[0].stops.length,
-      backwardStopsLength: ticket.segments[1].stops.length,
+      fStops: ticket.segments[0].stops.length,
+      bStops: ticket.segments[1].stops.length,
       id: nanoid(),
+      stop: stop,
     };
   };
 }

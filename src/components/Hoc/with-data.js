@@ -1,64 +1,94 @@
 /* eslint-disable */
-import React, { Component } from 'react';
+import React, { useEffect, useState, useMemo, useContext, useCallback } from 'react';
 import ErrorBoundry from '../Error-boundry/error-boundry';
 import AviasalesService from '../../services';
-import { AviasalesServiceProvider } from '../Aviasales-service-context';
+const AviasalesServiceContext = React.createContext();
 
-const withData = (View) => {
-  return class extends Component {
-    aviasalesService = new AviasalesService();
+export function useAviaSalesContext() {
+  return useContext(AviasalesServiceContext);
+}
 
-    constructor() {
-      super();
-      this.state = {
-        tickets: [],
-        loading: true,
-        hasError: false,
-        limit: 5,
-        offset: 0,
-        filters: 'cheap',
-        usedCheckbox: 'all',
-        flagAll: true,
-        flagWithoutStops: true,
-        flagOneStop: true,
-        flagTwoStops: true,
-        flagThreeStops: true,
-      };
+function withData(View) {
+  return function () {
+    const aviasalesService = new AviasalesService();
+
+    const [tickets, setTickets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [hasError, setError] = useState(false);
+    const [limit, setLimit] = useState({ limit: 5, offset: 0 });
+    const [filters, setFilters] = useState('cheap');
+    const [usedcheckbox, setUsedcheckbox] = useState({
+      all: true,
+      without: true,
+      one: true,
+      two: true,
+      three: true,
+    });
+
+    useEffect(() => {
+      onItemLoaded();
+    }, []);
+
+    function onItemLoaded() {
+      aviasalesService
+        .getTickets()
+        .then((data) => setTickets((tickets) => (tickets = data)), setLoading(false))
+        .catch(onError);
     }
 
-    showNextTicket = () => {
-      this.setState({
-        limit: this.state.limit + 5,
-      });
-    };
+    function onError() {
+      setError(true);
+      setLoading(false);
+    }
 
-    resetCountTicket = () => {
-      this.setState({
-        limit: 5,
-      });
-    };
+    const allHandler = (flag) => {
+      let tempFilter = { ...usedcheckbox };
 
-    onError = () => {
-      this.setState({
-        hasError: true,
-        loading: false,
-      });
-    };
+      tempFilter[flag] = !tempFilter[flag];
 
-    onItemLoaded = () => {
-      this.aviasalesService
-        .getTickets()
-        .then((data) =>
-          this.setState({
-            tickets: data,
-            loading: false,
+      if (flag === 'all') {
+        tempFilter = Object.fromEntries(
+          Object.keys(tempFilter).map((current) => {
+            return [current, tempFilter[flag]];
           }),
-        )
-        .catch(this.onError);
+        );
+      } else {
+        if (Object.keys(tempFilter).some((key) => tempFilter[key] === false)) {
+          tempFilter['all'] = false;
+        }
+        if (
+          Object.keys(tempFilter).every((key) => {
+            if (key === 'all') return true;
+            return tempFilter[key] === true;
+          })
+        ) {
+          tempFilter['all'] = true;
+        }
+      }
+      setUsedcheckbox({ ...tempFilter });
     };
 
-    sortTickets = (tickets, filters) =>
-      tickets.sort((a, b) => {
+    function showNextTicket() {
+      setLimit((prevState) => {
+        return {
+          ...prevState,
+          limit: prevState.limit + 5,
+        };
+      });
+    }
+
+    function onTicketsGroupChange(value) {
+      setFilters(value);
+      setLimit((prevState) => {
+        return {
+          ...prevState,
+          limit: 5,
+        };
+      });
+    }
+
+    function sortTickets(items, filters) {
+      return items.sort((a, b) => {
         if (filters === 'cheap') return a.price - b.price;
         if (filters === 'speed') {
           return a.forwardDuration + a.backwardDuration - (b.forwardDuration + b.backwardDuration);
@@ -71,151 +101,47 @@ const withData = (View) => {
             (b.forwardDuration + b.backwardDuration)
           );
         }
-        return tickets;
+        return items;
       });
-
-    onFilterChange = (value) => {
-      this.setState({
-        filters: value,
-        limit: 5,
-      });
-    };
-
-    onUsedCheckboxNameChange = (value) => {
-      this.setState({ usedCheckbox: value });
-    };
-
-    filerChange = (items, checkboxName) => {
-      switch (checkboxName) {
-        case 'flagWithoutStops':
-          return items;
-        case 'flagOneStop':
-          return items;
-
-        case 'flagTwoStops':
-          return items;
-
-        case 'flagThreeStops':
-          return items;
-        default:
-          return items;
-      }
-    };
-
-    allTicketsCheckbox = () => {
-      this.setState((state) => {
-        return {
-          flagAll: !state.flagAll,
-        };
-      });
-    };
-
-    withoutStopsCheckbox = (name) => {
-      this.onUsedCheckboxNameChange(name);
-
-      this.setState((state) => {
-        return {
-          flagWithoutStops: !state.flagWithoutStops,
-        };
-      });
-    };
-
-    oneStopsCheckbox = (name) => {
-      this.onUsedCheckboxNameChange(name);
-
-      this.setState((state) => {
-        return {
-          flagOneStop: !state.flagOneStop,
-        };
-      });
-    };
-
-    twoStopsCheckbox = (name) => {
-      this.onUsedCheckboxNameChange(name);
-
-      this.setState((state) => {
-        return {
-          flagTwoStops: !state.flagTwoStops,
-        };
-      });
-    };
-
-    threeStopsCheckbox = (name) => {
-      this.onUsedCheckboxNameChange(name);
-
-      this.setState((state) => {
-        return {
-          flagThreeStops: !state.flagThreeStops,
-        };
-      });
-    };
-
-    componentDidMount() {
-      this.onItemLoaded();
     }
 
-    render() {
-      const {
-        usedCheckbox,
-        tickets,
-        filters,
-        loading,
-        hasError,
-        limit,
-        offset,
-        flagAll,
-        flagWithoutStops,
-        flagOneStop,
-        flagTwoStops,
-        flagThreeStops,
-      } = this.state;
+    const filteredTickets = useCallback(
+      (tickArr) => {
+        return tickArr.filter((current) => {
+          if (usedcheckbox.all) return current;
+          if (usedcheckbox.without && current.fStops === 0 && current.bStops === 0) return true;
+          if (usedcheckbox.one && current.fStops === 1 && current.bStops === 1) return true;
+          if (usedcheckbox.two && current.fStops === 2 && current.bStops === 2) return true;
+          if (usedcheckbox.three && current.fStops === 3 && current.bStops === 3) return true;
+          return false;
+        });
+      },
+      [usedcheckbox],
+    );
 
-      const visibalItems = this.filerChange(tickets, usedCheckbox);
-      console.log(
-        'flagAll',
-        flagAll,
-        'flagWithoutStops',
-        flagWithoutStops,
-        'flagOneStop',
-        flagOneStop,
-        'flagTwoStops',
-        flagTwoStops,
-        'flagThreeStops',
-        flagThreeStops,
-      );
+    const visibleTickets = filteredTickets(tickets);
+    const tickets_sort = sortTickets(visibleTickets, filters);
+    const group = tickets_sort.slice(limit.offset, limit.limit);
 
-      const filterItems = this.sortTickets(tickets, filters);
+    const data = {
+      items: group,
+      filters: filters,
+      loading: loading,
+      hasError: hasError,
+      usedcheckbox: usedcheckbox,
+      allHandler: allHandler,
+      showNextTicket: showNextTicket,
+      onTicketsGroupChange: onTicketsGroupChange,
+    };
 
-      const items = filterItems.slice(offset, limit);
-
-      const data = {
-        items: items,
-        filters: filters,
-        loading: loading,
-        hasError: hasError,
-        flagAll: flagAll,
-        flagWithoutStops: flagWithoutStops,
-        flagOneStop: flagOneStop,
-        flagTwoStops: flagTwoStops,
-        flagThreeStops: flagThreeStops,
-        showNextTicket: this.showNextTicket,
-        onFilterChange: this.onFilterChange,
-        allTicketsCheckbox: this.allTicketsCheckbox,
-        withoutStopsCheckbox: this.withoutStopsCheckbox,
-        oneStopsCheckbox: this.oneStopsCheckbox,
-        twoStopsCheckbox: this.twoStopsCheckbox,
-        threeStopsCheckbox: this.threeStopsCheckbox,
-      };
-
-      return (
-        <ErrorBoundry>
-          <AviasalesServiceProvider value={data}>
-            <View />
-          </AviasalesServiceProvider>
-        </ErrorBoundry>
-      );
-    }
+    return (
+      <ErrorBoundry>
+        <AviasalesServiceContext.Provider value={data}>
+          <View />
+        </AviasalesServiceContext.Provider>
+      </ErrorBoundry>
+    );
   };
-};
+}
 
 export default withData;

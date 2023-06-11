@@ -32,7 +32,7 @@ body {
   height: 100%;
   width: 100%;
   font-size: 100%;
-
+  padding: 0 calc(20px - (100vw - 100%)) 0 0;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;

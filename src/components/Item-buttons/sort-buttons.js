@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import classes from './Item-buttons.module.scss';
 
-export default function SortButtons({ filters, onFilterChange }) {
+export default function SortButtons({ filters, onTicketsGroupChange }) {
   const buttons = [
-    { name: 'cheap', label: 'Для Комилюши :)' },
+    { name: 'cheap', label: 'Самые дешевые' },
     { name: 'speed', label: 'Самые быстрые' },
     { name: 'optimal', label: 'Оптимальные' },
   ];
@@ -17,7 +17,7 @@ export default function SortButtons({ filters, onFilterChange }) {
         key={name}
         type="button"
         className={classnames(classes.Button, name === filters && classes.ButtonActive)}
-        onClick={() => onFilterChange(name)}>
+        onClick={() => onTicketsGroupChange(name)}>
         {label}
       </button>
     );
@@ -27,11 +27,10 @@ export default function SortButtons({ filters, onFilterChange }) {
 }
 
 SortButtons.defaultprops = {
-  filters: '',
-  onFilterChange: () => {},
+  onTicketsGroupChange: () => {},
 };
 
 SortButtons.propTypes = {
   filters: PropTypes.string,
-  onFilterChange: PropTypes.func,
+  onTicketsGroupChange: PropTypes.func,
 };

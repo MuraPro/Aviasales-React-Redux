@@ -1,38 +1,12 @@
 /* eslint-disable */
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import classNames from 'classnames';
-import { withAviasalesService } from '../Hoc';
+import { useAviaSalesContext } from '../Hoc/with-data';
+
 import classes from './Item-filter.module.scss';
 
-function Filter({
-  flagAll,
-  flagWithoutStops,
-  flagOneStop,
-  flagTwoStops,
-  flagThreeStops,
-
-  allTicketsCheckbox,
-  withoutStopsCheckbox,
-  oneStopsCheckbox,
-  twoStopsCheckbox,
-  threeStopsCheckbox,
-}) {
-  function heandlerAllCheckbox(e) {
-    allTicketsCheckbox();
-  }
-  function handlerWithoutStopsCheckbox(e) {
-    withoutStopsCheckbox(e.target.name);
-  }
-  function handlerOneStopsCheckbox(e) {
-    oneStopsCheckbox(e.target.name);
-  }
-  function handlerTwoStopsCheckbox(e) {
-    twoStopsCheckbox(e.target.name);
-  }
-  function handlerThreeStopsCheckbox(e) {
-    threeStopsCheckbox(e.target.name);
-  }
+function Filter() {
+  const { usedcheckbox, allHandler } = useAviaSalesContext();
 
   return (
     <div className={classes.Filter}>
@@ -43,10 +17,10 @@ function Filter({
             <label htmlFor="all" className={classes.Item}>
               <input
                 type="checkbox"
-                name="flagAll"
+                name="all"
                 id="all"
-                checked={flagAll}
-                onChange={heandlerAllCheckbox}
+                onChange={() => allHandler('all')}
+                checked={usedcheckbox.all}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
                 tabIndex={1}
               />
@@ -58,10 +32,10 @@ function Filter({
             <label htmlFor="without-stops" className={classes.Item}>
               <input
                 type="checkbox"
-                name="flagWithoutStops"
+                name="without"
                 id="without-stops"
-                checked={flagAll && flagWithoutStops}
-                onChange={handlerWithoutStopsCheckbox}
+                onChange={() => allHandler('without')}
+                checked={usedcheckbox.without}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
               <span className={classes.CustomCheckbox} />
@@ -72,10 +46,10 @@ function Filter({
             <label htmlFor="one-stop" className={classes.Item}>
               <input
                 type="checkbox"
-                name="flagOneStop"
+                name="one"
                 id="one-stop"
-                checked={flagAll && flagOneStop}
-                onChange={handlerOneStopsCheckbox}
+                onChange={() => allHandler('one')}
+                checked={usedcheckbox.one}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
               <span className={classes.CustomCheckbox} />1 пересадка
@@ -85,10 +59,10 @@ function Filter({
             <label htmlFor="two-stops" className={classes.Item}>
               <input
                 type="checkbox"
-                name="flagTwoStops"
+                name="two"
                 id="two-stops"
-                checked={flagAll && flagTwoStops}
-                onChange={handlerTwoStopsCheckbox}
+                onChange={() => allHandler('two')}
+                checked={usedcheckbox.two}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
               <span className={classes.CustomCheckbox} />2 пересадки
@@ -98,10 +72,10 @@ function Filter({
             <label htmlFor="three-stops" className={classes.Item}>
               <input
                 type="checkbox"
-                name="flagThreeStops"
+                name="three"
                 id="three-stops"
-                checked={flagAll && flagThreeStops}
-                onChange={handlerThreeStopsCheckbox}
+                onChange={() => allHandler('three')}
+                checked={usedcheckbox.three}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
               <span className={classes.CustomCheckbox} />3 пересадки
@@ -113,38 +87,4 @@ function Filter({
   );
 }
 
-function mapMethodsToProps(data) {
-  return {
-    items: data.items,
-    flagAll: data.flagAll,
-    flagWithoutStops: data.flagWithoutStops,
-    flagOneStop: data.flagOneStop,
-    flagTwoStops: data.flagTwoStops,
-    flagThreeStops: data.flagThreeStops,
-    allTicketsCheckbox: data.allTicketsCheckbox,
-    changeFilter: data.changeFilter,
-    onUsedCheckboxFlagChange: data.onUsedCheckboxFlagChange,
-    onUsedCheckboxNameChange: data.onUsedCheckboxNameChange,
-    markAllCheckboxs: data.markAllCheckboxs,
-    withoutStopsCheckbox: data.withoutStopsCheckbox,
-    oneStopsCheckbox: data.oneStopsCheckbox,
-    twoStopsCheckbox: data.twoStopsCheckbox,
-    threeStopsCheckbox: data.threeStopsCheckbox,
-  };
-}
-
-Filter.propTypes = {
-  items: PropTypes.array,
-  flagAll: PropTypes.bool,
-  flagWithoutStops: PropTypes.bool,
-  flagOneStop: PropTypes.bool,
-  flagTwoStops: PropTypes.bool,
-  flagThreeStops: PropTypes.bool,
-  allTicketsCheckbox: PropTypes.func,
-  withoutStopsCheckbox: PropTypes.func,
-  oneStopsCheckbox: PropTypes.func,
-  twoStopsCheckbox: PropTypes.func,
-  threeStopsCheckbox: PropTypes.func,
-};
-
-export default withAviasalesService(mapMethodsToProps)(Filter);
+export default Filter;

@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import classes from './Item-list-card.module.scss';
 
-import { getStartTime, getEndTime, getTravelTime, getStops } from '../../utils/getTime';
+import { getStartTime, getEndTime, getTravelTime, getStops, formatPrice } from '../../utils';
 
 function CardView({ ticket }) {
   const {
@@ -15,14 +15,14 @@ function CardView({ ticket }) {
     backwardDuration,
     forwardStops,
     backwardStops,
-    forwardStopsLength,
-    backwardStopsLength,
+    fStops,
+    bStops,
   } = ticket;
 
   return (
     <>
       <div className={classes.GridRow}>
-        <span className={classes.Price}>{price}Р</span>
+        <span className={classes.Price}>{formatPrice(price)}₽</span>
         <img src={`//pics.avs.io/99/36/${carrier}.png`} alt="s7 logo" className={classes.Logo} />
       </div>
       <div className={classnames(classes.GridRow, classes.Forward)}>
@@ -39,7 +39,7 @@ function CardView({ ticket }) {
           <p>{getTravelTime(forwardDuration)}</p>
         </div>
         <div>
-          <p className={classes.TextSecondary}>{getStops(forwardStopsLength)}</p>
+          <p className={classes.TextSecondary}>{getStops(fStops)}</p>
           <p>{forwardStops.join(', ')}</p>
         </div>
       </div>
@@ -57,7 +57,7 @@ function CardView({ ticket }) {
           <p>{getTravelTime(backwardDuration)}</p>
         </div>
         <div>
-          <p className={classes.TextSecondary}>{getStops(backwardStopsLength)}</p>
+          <p className={classes.TextSecondary}>{getStops(bStops)}</p>
           <p>{backwardStops.join(', ')}</p>
         </div>
       </div>
