@@ -1,12 +1,15 @@
 /* eslint-disable */
 import React from 'react';
 import classNames from 'classnames';
-import { useAviaSalesContext } from '../Hoc/with-data';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { allHandler } from '../../Redux/slices/checkboxs/checkboxsSlice';
 import classes from './Item-filter.module.scss';
 
 function Filter() {
-  const { usedcheckbox, allHandler } = useAviaSalesContext();
+  const usedcheckbox = useSelector((state) => state.checkboxs.usedcheckbox);
+  const dispatch = useDispatch();
+
+  const onChange = (e) => dispatch(allHandler(e.target.name));
 
   return (
     <div className={classes.Filter}>
@@ -19,7 +22,7 @@ function Filter() {
                 type="checkbox"
                 name="all"
                 id="all"
-                onChange={() => allHandler('all')}
+                onChange={onChange}
                 checked={usedcheckbox.all}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
                 tabIndex={1}
@@ -34,7 +37,7 @@ function Filter() {
                 type="checkbox"
                 name="without"
                 id="without-stops"
-                onChange={() => allHandler('without')}
+                onChange={onChange}
                 checked={usedcheckbox.without}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
@@ -48,7 +51,7 @@ function Filter() {
                 type="checkbox"
                 name="one"
                 id="one-stop"
-                onChange={() => allHandler('one')}
+                onChange={onChange}
                 checked={usedcheckbox.one}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
@@ -61,7 +64,7 @@ function Filter() {
                 type="checkbox"
                 name="two"
                 id="two-stops"
-                onChange={() => allHandler('two')}
+                onChange={onChange}
                 checked={usedcheckbox.two}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />
@@ -74,7 +77,7 @@ function Filter() {
                 type="checkbox"
                 name="three"
                 id="three-stops"
-                onChange={() => allHandler('three')}
+                onChange={onChange}
                 checked={usedcheckbox.three}
                 className={classNames(classes.RealCheckbox, 'Pseudo-hidden')}
               />

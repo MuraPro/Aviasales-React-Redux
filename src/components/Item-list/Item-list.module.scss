@@ -2,6 +2,8 @@
   margin-left: 20px;
   width: 502px;
   flex-shrink: 1 1;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 800px) {
     margin-left: 0;
@@ -40,4 +42,12 @@
   font-weight: 600;
   font-size: 14px;
   text-align: center;
+}
+
+.Spinner {
+  margin: 10px 0px 25px 0px;
+}
+
+.Loading {
+  font-size: 24;
 }

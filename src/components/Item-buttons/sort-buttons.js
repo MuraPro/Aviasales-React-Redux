@@ -1,15 +1,14 @@
 /* eslint-disable */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { useSelector, useDispatch } from 'react-redux';
+import { onTicketsGroupChange } from '../../Redux/slices/tickets/ticketSlice';
 import classes from './Item-buttons.module.scss';
 
-export default function SortButtons({ filters, onTicketsGroupChange }) {
-  const buttons = [
-    { name: 'cheap', label: 'Самые дешевые' },
-    { name: 'speed', label: 'Самые быстрые' },
-    { name: 'optimal', label: 'Оптимальные' },
-  ];
+function SortButtons() {
+  const dispatch = useDispatch();
+  const filters = useSelector((state) => state.tickets.filters);
+  const buttons = useSelector((state) => state.tickets.buttons);
 
   const tabs = buttons.map(({ name, label }) => {
     return (
@@ -17,20 +16,12 @@ export default function SortButtons({ filters, onTicketsGroupChange }) {
         key={name}
         type="button"
         className={classnames(classes.Button, name === filters && classes.ButtonActive)}
-        onClick={() => onTicketsGroupChange(name)}>
+        onClick={() => dispatch(onTicketsGroupChange(name))}>
         {label}
       </button>
     );
   });
-
   return <div className={classes.Wrapper}>{tabs}</div>;
 }
 
-SortButtons.defaultprops = {
-  onTicketsGroupChange: () => {},
-};
-
-SortButtons.propTypes = {
-  filters: PropTypes.string,
-  onTicketsGroupChange: PropTypes.func,
-};
+export default SortButtons;

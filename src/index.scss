@@ -145,3 +145,8 @@ h6 {
     width: 100%;
   }
 }
+
+:where(.css-dev-only-do-not-override-w8mnev).ant-spin-spinning {
+  margin: 10px 0px 30px 0px !important;
+  transition: margin 1s ease 0s, ease-in 0.5s;
+}

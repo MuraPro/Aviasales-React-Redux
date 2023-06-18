@@ -1,40 +1,58 @@
+/* eslint-disable */
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useAviaSalesContext } from '../Hoc/with-data';
-import { withValidation } from '../Hoc';
-import { AddTicketsButton, SortButtons } from '../Item-buttons';
+import { useSelector } from 'react-redux';
+import { sortTickets, filterTickets, transformTickets } from '../../utils';
 import ItemCard from '../Item-list-card/Item-list-card';
+import { SortButtons, ShowTicketsButton } from '../Item-buttons';
+import ErrorIndicator from '../Error-indicator';
+import WarningMsg from '../item-alert';
+import uniqueKey from '../../utils/uniqueKey';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import classes from './Item-list.module.scss';
 
 function ItemList() {
-  const { items, ...other } = useAviaSalesContext();
+  const loading = useSelector((state) => state.tickets.loading);
+  const error = useSelector((state) => state.tickets.error);
+  const limit = useSelector((state) => state.tickets.limit);
+  const tickets = useSelector((state) => state.tickets.tickets);
+  const filters = useSelector((state) => state.tickets.filters);
+  const usedcheckbox = useSelector((state) => state.checkboxs.usedcheckbox);
 
-  const tickets = items.map((ticket) => <ItemCard key={ticket.id} ticket={ticket} />);
-  const sortTicketsButtons = <SortButtons {...other} />;
+  //! Фильтрация и сортировка билетов: =>>>
+  const transformTicket = tickets.map((ticket) => transformTickets(ticket));
+  const filteredTickets = filterTickets(transformTicket, usedcheckbox);
+  const sortedTickets = sortTickets(filteredTickets, filters);
 
-  const addTicketsButton =
-    tickets.length > 0 ? (
-      <AddTicketsButton {...other} />
-    ) : (
-      <h2 className={classes.Empty}>Используйте фильтр для поиска подходящего билета...</h2>
-    );
+  //! Условия отображения елементов компанента ItemList: =>>>
+  const sortTicketsButtons = <SortButtons />;
+  const content = error ? (
+    <ErrorIndicator />
+  ) : (
+    sortedTickets.slice(0, limit).map((ticket) => <ItemCard key={uniqueKey()} ticket={ticket} />)
+  );
+
+  const showTicketButton = transformTicket.length > limit &&
+    !error &&
+    !Object.values(usedcheckbox).every((i) => i === false) && <ShowTicketsButton />;
+
+  const warningMsg = Object.values(usedcheckbox).every((i) => i === false)
+    ? !error && <WarningMsg />
+    : null;
+
+  const antIcon = <LoadingOutlined className={classes.Loading} spin />;
+  const spinner = loading ? !error && <Spin indicator={antIcon} /> : null;
 
   return (
     <div className={classes.Tickets}>
       {sortTicketsButtons}
-      {tickets}
-      {addTicketsButton}
+      {spinner}
+      {content}
+      {warningMsg}
+      {showTicketButton}
     </div>
   );
 }
 
-ItemList.defaultProp = {
-  filters: '',
-};
-
-ItemList.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object),
-};
-
-export default withValidation(ItemList);
+export default ItemList;

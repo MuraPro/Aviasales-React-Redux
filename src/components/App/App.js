@@ -1,17 +1,12 @@
 /* eslint-disable */
 import React from 'react';
-import ErrorBoundry from '../Error-boundry/error-boundry';
-import { withData } from '../Hoc';
+import withData from '../Hoc/with-data';
 import Row from '../Row';
 import Filter from '../Item-filter/Item-filter';
 import ItemList from '../Item-list';
 
-function App() {
-  return (
-    <ErrorBoundry>
-      <Row sidebar={<Filter />} content={<ItemList />} />
-    </ErrorBoundry>
-  );
+function App({ items }) {
+  return <Row sidebar={<Filter />} content={<ItemList />} />;
 }
 
 export default withData(App);
