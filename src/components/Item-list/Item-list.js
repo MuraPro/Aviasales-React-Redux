@@ -42,7 +42,13 @@ function ItemList() {
     : null;
 
   const antIcon = <LoadingOutlined className={classes.Loading} spin />;
-  const spinner = loading ? !error && <Spin indicator={antIcon} /> : null;
+  const spinner = loading
+    ? !error && (
+        <div className={classes.Container}>
+          <Spin indicator={antIcon} />
+        </div>
+      )
+    : null;
 
   return (
     <div className={classes.Tickets}>
