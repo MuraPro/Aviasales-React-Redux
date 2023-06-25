@@ -53,13 +53,6 @@ const ticketSlice = createSlice({
     ],
     limit: 5,
     offset: 0,
-    usedcheckbox: {
-      all: true,
-      without: true,
-      one: true,
-      two: true,
-      three: true,
-    },
   },
   reducers: {
     showNextTicket(state) {
@@ -69,42 +62,6 @@ const ticketSlice = createSlice({
       state.filters = action.payload;
       state.tickets = sortTickets(state.tickets, state.filters);
       state.limit = 5;
-    },
-    allHandler(state, action) {
-      const flag = action.payload;
-      let tempFilter = { ...state.usedcheckbox };
-
-      tempFilter[flag] = !tempFilter[flag];
-
-      if (flag === 'all') {
-        tempFilter = Object.fromEntries(
-          Object.keys(tempFilter).map((current) => [current, tempFilter[flag]]),
-        );
-      } else {
-        if (Object.keys(tempFilter).some((key) => tempFilter[key] === false)) {
-          tempFilter['all'] = false;
-        }
-        if (
-          Object.keys(tempFilter).every((key) => {
-            if (key === 'all') return true;
-            return tempFilter[key] === true;
-          })
-        ) {
-          tempFilter['all'] = true;
-        }
-      }
-      state.usedcheckbox = tempFilter;
-    },
-    filteredTickets(state, action) {
-      console.log(action.payload.all);
-      state.tickets = state.tickets.filter((current) => {
-        if (action.payload.all) return current;
-        if (action.payload.without && current.fStops === 0 && current.bStops === 0) return true;
-        if (action.payload.one && current.fStops === 1 && current.bStops === 1) return true;
-        if (action.payload.two && current.fStops === 2 && current.bStops === 2) return true;
-        if (action.payload.three && current.fStops === 3 && current.bStops === 3) return true;
-        return false;
-      });
     },
   },
 
@@ -142,15 +99,8 @@ const ticketSlice = createSlice({
   },
 });
 
-const { showNextTicket, onTicketsGroupChange, allHandler, filteredTickets } = ticketSlice.actions;
+const { showNextTicket, onTicketsGroupChange } = ticketSlice.actions;
 
 export default ticketSlice.reducer;
 
-export {
-  showNextTicket,
-  onTicketsGroupChange,
-  fetchSearchId,
-  fetchTickets,
-  allHandler,
-  filteredTickets,
-};
+export { showNextTicket, onTicketsGroupChange, fetchSearchId, fetchTickets };

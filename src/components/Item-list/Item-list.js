@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ItemCard from '../Item-list-card/Item-list-card';
-import { sortTickets } from '../../utils';
+import { sortTickets, filterTickets } from '../../utils';
 import { SortButtons, ShowTicketsButton } from '../Item-buttons';
 import ErrorIndicator from '../Error-indicator';
 import WarningMsg from '../item-alert';
@@ -18,7 +18,7 @@ function ItemList() {
   const offset = useSelector((state) => state.tickets.offset);
   const tickets = useSelector((state) => state.tickets.tickets);
   const filters = useSelector((state) => state.tickets.filters);
-  const usedcheckbox = useSelector((state) => state.tickets.usedcheckbox);
+  const usedcheckbox = useSelector((state) => state.checkboxs.usedcheckbox);
 
   //! Фильтрация и сортировка билетов: =>>>
   //   const filteredTickets = useCallback(
@@ -41,7 +41,7 @@ function ItemList() {
   //     },
   //     [filters],
   //   );
-  //   const visibleTickets = filteredTickets(tickets);
+  const visibleTickets = filterTickets(tickets, usedcheckbox);
   //   const ticketsGroup = sortedTickets(tickets, filters);
 
   //! Условия отображения елементов компанента ItemList: =>>>
@@ -50,7 +50,7 @@ function ItemList() {
   const content = error ? (
     <ErrorIndicator />
   ) : (
-    tickets.map((ticket) => <ItemCard key={ticket.id} ticket={ticket} />)
+    visibleTickets.map((ticket) => <ItemCard key={ticket.id} ticket={ticket} />)
   );
 
   const showTicketButton = tickets.length > limit &&
