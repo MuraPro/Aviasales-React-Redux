@@ -3,7 +3,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { allHandler } from '../../Redux/slices/checkboxs/checkboxsSlice';
-// import { filteredTickets } from '../../Redux/slices/tickets/ticketSlice';
 import classes from './Item-filter.module.scss';
 
 function Filter() {
@@ -12,7 +11,6 @@ function Filter() {
 
   const onChange = (e) => {
     dispatch(allHandler(e.target.name));
-    // dispatch(filteredTickets(usedcheckbox));
   };
 
   return (
