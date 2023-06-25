@@ -1,5 +1,7 @@
 ## Визульная чать проекта - https://aviasales-rust-eight.vercel.app/
 
+//{ warnAfter: 128 }
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -23,6 +25,7 @@ bStops,
 
 return (
 <>
+
 <div className={classes.GridRow}>
 <span className={classes.Price}>{formatPrice(price)}₽</span>
 <img src={`//pics.avs.io/99/36/${carrier}.png`} alt="logotype" className={classes.Logo} />

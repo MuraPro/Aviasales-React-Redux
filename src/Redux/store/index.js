@@ -9,8 +9,8 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      immutableCheck: 128,
-      serializableCheck: 128,
+      immutableCheck: false,
+      serializableCheck: false,
     }),
 });
 

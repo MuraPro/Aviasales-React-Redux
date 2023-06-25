@@ -10,13 +10,17 @@ function SortButtons() {
   const filters = useSelector((state) => state.tickets.filters);
   const buttons = useSelector((state) => state.tickets.buttons);
 
+  const buttonsHandler = (name) => {
+    dispatch(onTicketsGroupChange(name));
+  };
+
   const tabs = buttons.map(({ name, label }) => {
     return (
       <button
         key={name}
         type="button"
         className={classnames(classes.Button, name === filters && classes.ButtonActive)}
-        onClick={() => dispatch(onTicketsGroupChange(name))}>
+        onClick={() => buttonsHandler(name)}>
         {label}
       </button>
     );

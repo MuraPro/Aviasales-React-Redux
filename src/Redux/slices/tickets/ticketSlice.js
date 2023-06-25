@@ -26,9 +26,9 @@ const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (_, { reject
     let isNotLastTicketsPack = true;
     while (isNotLastTicketsPack) {
       const { tickets, stop } = await res.json();
-      if (stop) isNotLastTicketsPack = false;
       const ticketsGroup = tickets.map((ticket) => transformTickets(ticket));
       const sortedTickets = sortTickets(ticketsGroup, 'cheap');
+      if (stop) isNotLastTicketsPack = false;
       return { sortedTickets, stop };
     }
   } catch (err) {
@@ -40,6 +40,7 @@ const ticketSlice = createSlice({
   name: 'tickets',
   initialState: {
     tickets: [],
+    newArr: [],
     loading: false,
     searchId: false,
     stopFetch: false,

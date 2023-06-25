@@ -20,19 +20,14 @@
 
 .GridRow {
   display: grid;
-  // grid-template-columns: repeat(3, 1fr);
   grid-template-columns: 3fr 2.6fr 2fr;
   grid-column: 2;
 }
 
 .Logo {
   grid-column: 3;
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   object-fit: cover;
+  width: 97px;
+  height: 35px;
 }
 
 .Price {
