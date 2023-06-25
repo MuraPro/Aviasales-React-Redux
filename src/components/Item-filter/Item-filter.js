@@ -2,14 +2,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { allHandler } from '../../Redux/slices/checkboxs/checkboxsSlice';
+import { allHandler, filteredTickets } from '../../Redux/slices/tickets/ticketSlice';
 import classes from './Item-filter.module.scss';
 
 function Filter() {
-  const usedcheckbox = useSelector((state) => state.checkboxs.usedcheckbox);
+  const usedcheckbox = useSelector((state) => state.tickets.usedcheckbox);
   const dispatch = useDispatch();
 
-  const onChange = (e) => dispatch(allHandler(e.target.name));
+  const onChange = (e) => {
+    dispatch(allHandler(e.target.name));
+    dispatch(filteredTickets(usedcheckbox));
+  };
 
   return (
     <div className={classes.Filter}>

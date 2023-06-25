@@ -23,7 +23,7 @@ function CardView({ ticket }) {
     <>
       <div className={classes.GridRow}>
         <span className={classes.Price}>{formatPrice(price)}₽</span>
-        <img src={`//pics.avs.io/99/36/${carrier}.png`} alt="s7 logo" className={classes.Logo} />
+        <img src={`//pics.avs.io/99/36/${carrier}.png`} alt="logotype" className={classes.Logo} />
       </div>
       <div className={classnames(classes.GridRow, classes.Forward)}>
         <div>

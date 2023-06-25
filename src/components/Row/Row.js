@@ -4,11 +4,11 @@ import Logo from '../../images/Logo.png';
 
 function Row({ sidebar, content }) {
   return (
-    <div className="App">
+    <>
       <div className="Page-wrapper">
         <main>
           <div className="Logo-wrapper">
-            <img src={Logo} alt="123" className="Logo" />
+            <img src={Logo} alt="123" className="Logotype" />
           </div>
           <div className="Content-wrapper">
             {sidebar}
@@ -16,7 +16,7 @@ function Row({ sidebar, content }) {
           </div>
         </main>
       </div>
-    </div>
+    </>
   );
 }
 

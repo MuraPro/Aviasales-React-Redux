@@ -67,9 +67,6 @@ a:hover {
 ul li {
   list-style: none;
 }
-img {
-  vertical-align: top;
-}
 
 h1,
 h2,
@@ -80,6 +77,7 @@ h6 {
   font-size: inherit;
   font-weight: 400;
 }
+
 /*--------------------*/
 
 .Pseudo-hidden {
@@ -97,20 +95,20 @@ h6 {
 }
 
 .Page-wrapper {
-  background-color: #f3f7fa;
-  max-width: 960px;
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
   align-items: center;
+  background-color: #f3f7fa;
+  display: flex;
   flex-direction: column;
+  margin: 0 auto;
+  max-width: 960px;
+  min-height: 100vh;
 }
 
 .Content-wrapper {
   display: flex;
   justify-content: space-between;
-  max-width: 774px;
   align-items: flex-start;
+  max-width: 774px;
   padding-bottom: 20px;
 
   @media (max-width: 800px) {
@@ -128,20 +126,6 @@ h6 {
   justify-content: center;
 }
 
-.Logo {
+.Logotype {
   margin: 30px 0;
-}
-
-.Tickets {
-  margin-left: 20px;
-  width: 502px;
-  flex-shrink: 1 1;
-
-  @media (max-width: 800px) {
-    margin-left: 0;
-  }
-
-  @media (max-width: 570px) {
-    width: 100%;
-  }
 }

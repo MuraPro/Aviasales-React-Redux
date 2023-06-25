@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCookie } from '../../../utils';
-import { nanoid } from 'nanoid';
+import { getCookie, sortTickets } from '../../../utils';
+import { transformTickets } from '../../../utils';
 
 const fetchSearchId = createAsyncThunk('tickets/fetchSearchId', async (_, { rejectWithValue }) => {
   try {
@@ -23,8 +23,14 @@ const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (_, { reject
     if (!res.ok) {
       throw new Error(`${res.status}`);
     }
-
-    return await res.json();
+    let isNotLastTicketsPack = true;
+    while (isNotLastTicketsPack) {
+      const { tickets, stop } = await res.json();
+      if (stop) isNotLastTicketsPack = false;
+      const ticketsGroup = tickets.map((ticket) => transformTickets(ticket));
+      const sortedTickets = sortTickets(ticketsGroup, 'cheap');
+      return { sortedTickets, stop };
+    }
   } catch (err) {
     return rejectWithValue(err.message);
   }
@@ -47,6 +53,13 @@ const ticketSlice = createSlice({
     ],
     limit: 5,
     offset: 0,
+    usedcheckbox: {
+      all: true,
+      without: true,
+      one: true,
+      two: true,
+      three: true,
+    },
   },
   reducers: {
     showNextTicket(state) {
@@ -54,7 +67,44 @@ const ticketSlice = createSlice({
     },
     onTicketsGroupChange(state, action) {
       state.filters = action.payload;
+      state.tickets = sortTickets(state.tickets, state.filters);
       state.limit = 5;
+    },
+    allHandler(state, action) {
+      const flag = action.payload;
+      let tempFilter = { ...state.usedcheckbox };
+
+      tempFilter[flag] = !tempFilter[flag];
+
+      if (flag === 'all') {
+        tempFilter = Object.fromEntries(
+          Object.keys(tempFilter).map((current) => [current, tempFilter[flag]]),
+        );
+      } else {
+        if (Object.keys(tempFilter).some((key) => tempFilter[key] === false)) {
+          tempFilter['all'] = false;
+        }
+        if (
+          Object.keys(tempFilter).every((key) => {
+            if (key === 'all') return true;
+            return tempFilter[key] === true;
+          })
+        ) {
+          tempFilter['all'] = true;
+        }
+      }
+      state.usedcheckbox = tempFilter;
+    },
+    filteredTickets(state, action) {
+      console.log(action.payload.all);
+      state.tickets = state.tickets.filter((current) => {
+        if (action.payload.all) return current;
+        if (action.payload.without && current.fStops === 0 && current.bStops === 0) return true;
+        if (action.payload.one && current.fStops === 1 && current.bStops === 1) return true;
+        if (action.payload.two && current.fStops === 2 && current.bStops === 2) return true;
+        if (action.payload.three && current.fStops === 3 && current.bStops === 3) return true;
+        return false;
+      });
     },
   },
 
@@ -73,7 +123,7 @@ const ticketSlice = createSlice({
         state.searchId = true;
       })
       .addCase(fetchTickets.fulfilled, (state, action) => {
-        state.tickets = [...state.tickets, ...action.payload.tickets];
+        state.tickets = [...state.tickets, ...action.payload.sortedTickets];
         state.stopFetch = action.payload.stop;
         state.loading = !action.payload.stop;
       })
@@ -92,8 +142,15 @@ const ticketSlice = createSlice({
   },
 });
 
-const { showNextTicket, onTicketsGroupChange } = ticketSlice.actions;
+const { showNextTicket, onTicketsGroupChange, allHandler, filteredTickets } = ticketSlice.actions;
 
 export default ticketSlice.reducer;
 
-export { showNextTicket, onTicketsGroupChange, fetchSearchId, fetchTickets };
+export {
+  showNextTicket,
+  onTicketsGroupChange,
+  fetchSearchId,
+  fetchTickets,
+  allHandler,
+  filteredTickets,
+};

@@ -2,6 +2,7 @@
 import { nanoid } from 'nanoid';
 
 const transformTickets = (ticket) => {
+  //   console.log(ticket.segments[0]);
   return {
     carrier: ticket.carrier,
     price: ticket.price,

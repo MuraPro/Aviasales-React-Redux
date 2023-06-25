@@ -16,13 +16,16 @@ function withData(View) {
 
     useEffect(() => {
       dispatch(fetchSearchId());
-
       return deleteCookie('searchId');
     }, [dispatch]);
 
     useEffect(() => {
       if (!stopFetch && searchId) dispatch(fetchTickets());
     }, [dispatch, tickets, fetchStatus500, stopFetch, searchId]);
+
+    // useEffect(() => {
+    //   if (!stopFetch && searchId) dispatch(fetchTickets());
+    // }, [dispatch, tickets, fetchStatus500, stopFetch, searchId]);
 
     return (
       <ErrorBoundry>
