@@ -6,7 +6,7 @@ function Row({ sidebar, content }) {
   return (
     <>
       <div className="Page-wrapper">
-        <main>
+        <main className="main">
           <div className="Logo-wrapper">
             <img src={Logo} alt="123" className="Logotype" />
           </div>
