@@ -1,13 +1,13 @@
-/* eslint-disable */
 import React from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { allHandler } from '../../Redux/slices/checkboxs/checkboxsSlice';
+import * as data from '../../Redux/slices/selectors';
 import classes from './Item-filter.module.scss';
 
 function Filter() {
-  const usedcheckbox = useSelector((state) => state.checkboxs.usedcheckbox);
   const dispatch = useDispatch();
+  const usedcheckbox = useSelector(data.usedcheckbox);
 
   const onChange = (e) => {
     dispatch(allHandler(e.target.name));

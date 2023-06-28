@@ -1,7 +1,5 @@
-/* eslint-disable */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCookie, sortTickets } from '../../../utils';
-import { transformTickets } from '../../../utils';
+import { getCookie, sortTickets, transformTickets } from '../../../utils';
 
 const fetchSearchId = createAsyncThunk('tickets/fetchSearchId', async (_, { rejectWithValue }) => {
   try {
@@ -11,7 +9,7 @@ const fetchSearchId = createAsyncThunk('tickets/fetchSearchId', async (_, { reje
     }
     return await res.json();
   } catch (err) {
-    return rejectWithValue(err);
+    return rejectWithValue(err.message);
   }
 });
 
@@ -23,14 +21,10 @@ const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (_, { reject
     if (!res.ok) {
       throw new Error(`${res.status}`);
     }
-    let isNotLastTicketsPack = true;
-    while (isNotLastTicketsPack) {
-      const { tickets, stop } = await res.json();
-      const ticketsGroup = tickets.map((ticket) => transformTickets(ticket));
-      const sortedTickets = sortTickets(ticketsGroup, 'cheap');
-      if (stop) isNotLastTicketsPack = false;
-      return { sortedTickets, stop };
-    }
+    const { tickets, stop } = await res.json();
+    const ticketsGroup = tickets.map((ticket) => transformTickets(ticket));
+    const sortedTickets = sortTickets(ticketsGroup, 'cheap');
+    return { sortedTickets, stop };
   } catch (err) {
     return rejectWithValue(err.message);
   }
@@ -56,9 +50,11 @@ const ticketSlice = createSlice({
     offset: 0,
   },
   reducers: {
+    /* eslint-disable no-param-reassign */
     showNextTicket(state) {
-      state.limit = state.limit + 5;
+      state.limit += 5;
     },
+    /* eslint-disable no-param-reassign */
     onTicketsGroupChange(state, action) {
       state.filters = action.payload;
       state.tickets = sortTickets(state.tickets, state.filters);

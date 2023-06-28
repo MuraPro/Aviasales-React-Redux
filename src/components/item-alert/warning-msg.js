@@ -1,5 +1,4 @@
 import React from 'react';
-
 import classes from './WarningMsg.module.scss';
 
 const WarningMsg = () => (

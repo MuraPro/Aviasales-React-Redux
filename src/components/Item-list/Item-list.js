@@ -1,20 +1,22 @@
-/* eslint-disable */
 import React from 'react';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-import ItemCard from '../Item-list-card/Item-list-card';
 import { filterTickets } from '../../utils';
 import { SortButtons, ShowTicketsButton } from '../Item-buttons';
 import ErrorIndicator from '../Error-indicator';
 import WarningMsg from '../item-alert';
-import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-
+import * as data from '../../Redux/slices/selectors';
+import ItemCard from '../Item-list-card/Item-list-card';
 import classes from './Item-list.module.scss';
-import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
 
 function ItemList() {
-  const usedcheckbox = useSelector((state) => state.checkboxs.usedcheckbox);
-  const { loading, error, limit, offset, tickets } = useSelector((state) => state.tickets);
+  const tickets = useSelector(data.tickets);
+  const usedcheckbox = useSelector(data.usedcheckbox);
+  const loading = useSelector(data.loading);
+  const error = useSelector(data.error);
+  const limit = useSelector(data.limit);
+  const offset = useSelector(data.offset);
 
   //! Фильтрация билетов =>>>
   const visibleTickets = filterTickets(tickets, usedcheckbox);
@@ -38,6 +40,7 @@ function ItemList() {
     : null;
 
   const antIcon = <LoadingOutlined className={classes.Loading} spin />;
+
   const spinner = loading
     ? !error && (
         <div className={classes.Container}>

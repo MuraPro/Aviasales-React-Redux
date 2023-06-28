@@ -1,6 +1,4 @@
-/* eslint-disable */
-
-const sortTickets = (items, filters) => {
+function sortTickets(items, filters) {
   return items.sort((a, b) => {
     if (filters === 'cheap') return a.price - b.price;
     if (filters === 'speed') {
@@ -16,6 +14,6 @@ const sortTickets = (items, filters) => {
     }
     return items;
   });
-};
+}
 
 export default sortTickets;

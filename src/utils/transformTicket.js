@@ -1,8 +1,6 @@
-/* eslint-disable */
 import { nanoid } from 'nanoid';
 
-const transformTickets = (ticket) => {
-  //   console.log(ticket.segments[0]);
+function transformTickets(ticket) {
   return {
     carrier: ticket.carrier,
     price: ticket.price,
@@ -16,6 +14,6 @@ const transformTickets = (ticket) => {
     bStops: ticket.segments[1].stops.length,
     id: nanoid(),
   };
-};
+}
 
 export default transformTickets;

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -11,6 +10,7 @@ const initialState = {
   },
 };
 
+/* eslint-disable no-param-reassign */
 const checkboxsSlice = createSlice({
   name: 'checkboxs',
   initialState,
@@ -27,7 +27,7 @@ const checkboxsSlice = createSlice({
         );
       } else {
         if (Object.keys(tempFilter).some((key) => tempFilter[key] === false)) {
-          tempFilter['all'] = false;
+          tempFilter.all = false;
         }
         if (
           Object.keys(tempFilter).every((key) => {
@@ -35,7 +35,7 @@ const checkboxsSlice = createSlice({
             return tempFilter[key] === true;
           })
         ) {
-          tempFilter['all'] = true;
+          tempFilter.all = true;
         }
       }
       state.usedcheckbox = tempFilter;
