@@ -8,8 +8,10 @@ import './index.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const el = (
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <React.StrictMode>
+    <Provider der store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
 );
 root.render(el);
